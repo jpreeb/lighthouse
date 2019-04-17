@@ -26,4 +26,50 @@ module.exports = [
       },
     },
   },
+  {
+    lhr: {
+      requestedUrl: 'http://localhost:10200/tricky-main-thread.html?setTimeout',
+      finalUrl: 'http://localhost:10200/tricky-main-thread.html?setTimeout',
+      audits: {
+        interactive: {
+          // Make sure all of the CPU time is reflected in the perf metrics as well.
+          score: '<.2'
+        },
+        'bootup-time': {
+          details: {
+            items: {
+              0: {
+              // FIXME: Appveyor finds this particular assertion very flaky for some reason :(
+                url: process.env.APPVEYOR ? /main/ : /main-thread-consumer/,
+                scripting: '>1000',
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+  {
+    lhr: {
+      requestedUrl: 'http://localhost:10200/tricky-main-thread.html?fetch',
+      finalUrl: 'http://localhost:10200/tricky-main-thread.html?fetch',
+      audits: {
+        interactive: {
+          // Make sure all of the CPU time is reflected in the perf metrics as well.
+          score: '<.2'
+        },
+        'bootup-time': {
+          details: {
+            items: {
+              0: {
+              // TODO: requires async stacks, https://github.com/GoogleChrome/lighthouse/pull/5504
+              // url: /main-thread-consumer/,
+                scripting: '>1000',
+              },
+            },
+          },
+        },
+      },
+    },
+  },
 ];
