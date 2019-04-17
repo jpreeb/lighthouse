@@ -82,7 +82,6 @@ class PageDependencyGraph {
     let i = 0;
 
     TracingProcessor.assertHasToplevelEvents(traceOfTab.mainThreadEvents);
-    TracingProcessor.mutateTopLevelEventsToCoverNextRunMicrotasks(traceOfTab.mainThreadEvents);
 
     const minimumEvtDur = MINIMUM_TASK_DURATION_OF_INTEREST * 1000;
     while (i < traceOfTab.mainThreadEvents.length) {

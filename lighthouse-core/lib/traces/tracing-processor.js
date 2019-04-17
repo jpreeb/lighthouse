@@ -8,8 +8,6 @@
 // The ideal input response latency, the time between the input task and the
 // first frame of the response.
 const BASE_RESPONSE_LATENCY = 16;
-// m74+ RunMicrotasks is split out from under ThreadControllerImpl::RunTask, see <URL TBD by paul>
-const MICROTASKS_TASK_TITLE = 'RunMicrotasks';
 // m71+ We added RunTask to `disabled-by-default-lighthouse`
 const SCHEDULABLE_TASK_TITLE_LH = 'RunTask';
 // m69-70 DoWork is different and we now need RunTask, see https://bugs.chromium.org/p/chromium/issues/detail?id=871204#c11
@@ -130,37 +128,6 @@ class TraceProcessor {
   }
 
   /**
-   * @param {Array<LH.TraceEvent>} events
-   */
-  static mutateTopLevelEventsToCoverNextRunMicrotasks(events) {
-    /** @type {LH.TraceEvent|undefined} */
-    let lastScheduleableTaskEvent;
-
-    for (let i = 0; i < events.length; i++) {
-      const event = events[i];
-      if (TraceProcessor.isScheduleableTask(event)) lastScheduleableTaskEvent = event;
-      if (event.name !== MICROTASKS_TASK_TITLE) continue;
-
-      if (!lastScheduleableTaskEvent || !lastScheduleableTaskEvent.dur) {
-        throw new Error('No previous task for RunMicrotasks event');
-      }
-
-      const lastTaskStartTs = lastScheduleableTaskEvent.ts;
-      const lastTaskDur = lastScheduleableTaskEvent.dur;
-      const lastTaskEndTs = lastTaskStartTs + lastTaskDur;
-      if (lastTaskEndTs >= event.ts) continue;
-
-      if (event.ph === 'B') {
-        if (event.ts - lastTaskEndTs > 100000) {
-          throw new Error('Previous task ended more than 100 ms before RunMicrotasks event');
-        }
-      } else if (event.ph === 'E') {
-        lastScheduleableTaskEvent.dur = event.ts - lastTaskStartTs;
-      }
-    }
-  }
-
-  /**
    * Provides durations in ms of all main thread top-level events
    * @param {Array<ToplevelEvent>} topLevelEvents
    * @param {number} startTime Optional start time (in ms relative to navstart) of range of interest. Defaults to navstart.
@@ -210,7 +177,6 @@ class TraceProcessor {
    * @return {Array<ToplevelEvent>}
    */
   static getMainThreadTopLevelEvents(tabTrace, startTime = 0, endTime = Infinity) {
-    TraceProcessor.mutateTopLevelEventsToCoverNextRunMicrotasks(tabTrace.mainThreadEvents);
     const topLevelEvents = [];
     // note: mainThreadEvents is already sorted by event start
     for (const event of tabTrace.mainThreadEvents) {
