@@ -10,6 +10,7 @@ const assert = require('assert');
 /* eslint-env jest */
 const TracingProcessor = require('../../../lib/traces/tracing-processor');
 const pwaTrace = require('../../fixtures/traces/progressive-app.json');
+const microtasksTrace = require('../../fixtures/traces/microtasks-m75.json');
 const defaultPercentiles = [0, 0.25, 0.5, 0.75, 0.9, 0.99, 1];
 
 const TraceOfTab = require('../../../computed/trace-of-tab.js');
@@ -184,6 +185,14 @@ describe('TracingProcessor lib', () => {
       assert.equal(ret[1].start, 1000);
       assert.equal(ret[1].end, 2000);
       assert.equal(ret[1].duration, 1000);
+    });
+
+    it('correctly handles microtasks', async () => {
+      const tabTrace = await TraceOfTab.compute_(microtasksTrace);
+      const events = TracingProcessor.getMainThreadTopLevelEvents(tabTrace);
+
+      const sumOfDurations = events.reduce((x, evt) => x + evt.duration, 0);
+      assert.equal(sumOfDurations, 3235.418);
     });
   });
 

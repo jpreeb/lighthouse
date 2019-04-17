@@ -5,10 +5,12 @@
  */
 'use strict';
 
+const TraceOfTab = require('../../computed/trace-of-tab.js');
 const PageDependencyGraph = require('../../computed/page-dependency-graph.js');
 const BaseNode = require('../../lib/dependency-graph/base-node.js');
 const NetworkRequest = require('../../lib/network-request.js');
 
+const microtasksTrace = require('../fixtures/traces/microtasks-m75.json');
 const sampleTrace = require('../fixtures/traces/progressive-app-m60.json');
 const sampleDevtoolsLog = require('../fixtures/traces/progressive-app-m60.devtools.log.json');
 
@@ -138,6 +140,13 @@ describe('PageDependencyGraph computed artifact:', () => {
       assert.equal(node2.event, traceOfTab.mainThreadEvents[5]);
       assert.equal(node2.childEvents.length, 1);
       assert.equal(node2.childEvents[0].name, 'LaterEvent');
+    });
+
+    it('correctly handles microtasks', async () => {
+      traceOfTab = await TraceOfTab.compute_(microtasksTrace);
+      const nodes = PageDependencyGraph.getCPUNodes(traceOfTab);
+      const sumOfDurations = nodes.reduce((x, node) => x + node.endTime - node.startTime, 0) / 1000;
+      assert.equal(sumOfDurations, 3207.885);
     });
   });
 
