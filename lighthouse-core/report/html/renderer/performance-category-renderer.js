@@ -82,7 +82,7 @@ class PerformanceCategoryRenderer extends CategoryRenderer {
   }
 
   /**
-   * Get an audit's wastedMs to sort the opportunity by.
+   * Get an audit's wastedMs, for sorting by in an opportunity table.
    * Opportunities with an error won't have a details object, so MIN_VALUE is returned to keep any
    * erroring opportunities last in sort order.
    * @param {LH.ReportResult.AuditRef} audit
