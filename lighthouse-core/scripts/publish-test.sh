@@ -13,6 +13,9 @@ bash "$DIRNAME/publish-prepare-pristine.sh"
 
 cd "$LH_PRISTINE_ROOT"
 
+# Install deps
+yarn --check-files
+
 # Test err'thing
 echo "${TXT_BOLD}Building all the clients..."
 yarn build-all
@@ -27,6 +30,7 @@ echo "Testing the CLI..."
 yarn start "https://example.com" --view
 
 echo "Testing a fresh local install..."
+VERSION=$(node -e "console.log(require('./package.json').version)")
 npm pack
 
 rm -rf /tmp/lighthouse-local-test || true
@@ -34,18 +38,22 @@ mkdir -p /tmp/lighthouse-local-test
 cd /tmp/lighthouse-local-test
 
 npm init -y
-npm install "$LH_PRISTINE_ROOT/lighthouse-*.tgz"
+npm install "$LH_PRISTINE_ROOT/lighthouse-$VERSION.tgz"
 npm explore lighthouse -- npm run smoke
 npm explore lighthouse -- npm run chrome # try the manual launcher
 npm explore lighthouse -- npm run fast -- http://example.com
 
 cd "$LH_PRISTINE_ROOT"
 rm -rf /tmp/lighthouse-local-test
-rm lighthouse-*.tgz
+rm "lighthouse-$VERSION.tgz"
 
 echo "${TXT_BOLD}Now manually...${TXT_RESET}"
 echo "✅   Test the extension. Open chrome://extensions"
-read -n 1 -p "${TXT_DIM}Press any key to continue...${TXT_RESET}" unused_variable
+echo "${TXT_DIM}Press any key to continue...${TXT_RESET}"
+read -n 1 -r unused_variable
+
+
 echo "✅   Test the viewer. Open http://localhost:8000"
 echo "    - Works with v4 report? https://gist.github.com/patrickhulce/7251f9eba409f385e4c0424515fe8009"
-read -n 1 -p "${TXT_DIM}Press any key to continue...${TXT_RESET}" unused_variable
+echo "${TXT_DIM}Press any key to complete the test script...${TXT_RESET}"
+read -n 1 -r unused_variable

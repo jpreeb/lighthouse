@@ -8,7 +8,11 @@ set -euxo pipefail
 
 # Setup a pristine git environment
 cd ../
-git clone git@github.com:GoogleChrome/lighthouse.git lighthouse-pristine
+
+if [[ ! -e lighthouse-pristine/ ]]; then
+  git clone git@github.com:GoogleChrome/lighthouse.git lighthouse-pristine
+fi
+
 cd lighthouse-pristine/
 
 if [[ -n "$(git status --porcelain)" ]]; then
