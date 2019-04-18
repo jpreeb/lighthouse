@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
 
-TXT_BOLD=$(tput bold)
-TXT_DIM=$(tput setaf 245)
-TXT_RESET=$(tput sgr0)
-
 DIRNAME="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 LH_PRISTINE_ROOT="$DIRNAME/../../../lighthouse-pristine"
 
@@ -24,11 +20,7 @@ if ! git rev-parse "v$VERSION" ; then
   git tag -a "v$VERSION" -m "v$VERSION"
 fi
 
-
-if [[ $(git rev-parse "v$VERSION") != $(git rev-parse HEAD )]]; then
-  echo "Cannot package a version other than the tagged version!";
-  exit 1;
-fi
+git checkout -f "v$VERSION"
 
 # Install the dependencies.
 yarn install
