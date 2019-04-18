@@ -6,22 +6,27 @@ TXT_RESET=$(tput sgr0)
 
 DIRNAME="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 LH_ROOT="$DIRNAME/../.."
-cd $LH_ROOT
+cd "$LH_ROOT"
 
 set -euxo pipefail
+
+if [[ "$#" -ne 1 ]]; then
+  echo "You must specify the version to prepare a commit for!"
+  exit 1
+fi
 
 OLD_VERSION=$(node -e "console.log(require('./package.json').version)")
 NEW_VERSION=$1
 BRANCH_NAME="bump_$NEW_VERSION"
 SEMVER_PATTERN="[0-9]*\.[0-9]*\.[0-9]*"
 
-if [[ $(echo $NEW_VERSION | sed 's/[0-9]*\.[0-9]*\.[0-9]*/SECRET_REPLACE/g') != "SECRET_REPLACE" ]]; then
+if [[ $(echo "$NEW_VERSION" | sed 's/[0-9]*\.[0-9]*\.[0-9]*/SECRET_REPLACE/g') != "SECRET_REPLACE" ]]; then
  echo "Incorrect version format. Must be x.x.x"
  exit 1
 fi
 
 if [[ -n "$(git status --porcelain)" ]]; then
-  echo "Pristine repo has changes to the files! Commit or stash the changes to continue."
+  echo "Repo has changes to the files! Commit or stash the changes to continue."
   exit 1
 fi
 
@@ -47,14 +52,13 @@ yarn update:sample-json
 yarn changelog
 
 # Add new contributors to changelog
-OLD_VERSION=$(node -e "console.log(require('./package.json').version)")
 git --no-pager shortlog -s -e -n "v2.3.0..v${OLD_VERSION}" | cut -f 2 | sort > auto_contribs_prior_to_last
 git --no-pager shortlog -s -e -n "v${OLD_VERSION}..HEAD" | cut -f 2 | sort > auto_contribs_since_last
 NEW_CONTRIBUTORS=$(comm -13 auto_contribs_prior_to_last auto_contribs_since_last)
 rm auto_contribs_prior_to_last auto_contribs_since_last
 
 if [[ $(echo "$NEW_CONTRIBUTORS" | wc -l) -gt 1 ]]; then
-  echo "Thanks to our new contributors 👽🐷🐰🐯🐻! \n$NEW_CONTRIBUTORS\n" | cat - changelog.md > tmp-changelog
+  printf "Thanks to our new contributors 👽🐷🐰🐯🐻! \n$NEW_CONTRIBUTORS\n" | cat - changelog.md > tmp-changelog
   mv tmp-changelog changelog.md
 fi
 
@@ -63,7 +67,9 @@ git commit -m "$NEW_VERSION"
 
 echo "Version bump commit ready on the ${TXT_BOLD}$BRANCH_NAME${TXT_RESET} branch!"
 
-read -n 1 -p "${TXT_DIM}Press any key to see the git diff, CTRL+C to exit...${TXT_RESET}" unused_variable
+echo "${TXT_DIM}Press any key to see the git diff, CTRL+C to exit...${TXT_RESET}"
+read -n 1 -r unused_variable
 git --no-pager diff HEAD^
-read -n 1 -p "${TXT_DIM}Press any key to push to GitHub, CTRL+C to exit...${TXT_RESET}" unused_variable
+echo "${TXT_DIM}Press any key to push to GitHub, CTRL+C to exit...${TXT_RESET}"
+read -n 1 -r unused_variable
 git push -u origin "$BRANCH_NAME"
