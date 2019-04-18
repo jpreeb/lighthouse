@@ -89,14 +89,10 @@ describe('PerfCategoryRenderer', () => {
     assert.equal(oppElements.length, oppAudits.length);
 
     const oppElement = oppElements[0];
-    const oppSparklineBarElement = oppElement.querySelector('.lh-sparkline__bar');
-    const oppSparklineElement = oppElement.querySelector('.lh-load-opportunity__sparkline');
     const oppTitleElement = oppElement.querySelector('.lh-audit__title');
     const oppWastedElement = oppElement.querySelector('.lh-audit__display-text');
     assert.ok(oppTitleElement.textContent, 'did not render title');
-    assert.ok(oppSparklineBarElement.style.width, 'did not set sparkline width');
     assert.ok(oppWastedElement.textContent, 'did not render stats');
-    assert.ok(oppSparklineElement.title, 'did not set tooltip on sparkline');
   });
 
   it('renders performance opportunities with an errorMessage', () => {

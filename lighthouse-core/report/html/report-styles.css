@@ -69,8 +69,6 @@
   --lh-score-margin: 12px;
   --lh-table-header-bg: #f8f9fa;
   --lh-table-higlight-bg: hsla(0, 0%, 75%, 0.1);
-  --lh-sparkline-height: 5px;
-  --lh-sparkline-thin-height: 3px;
   --lh-filmstrip-thumbnail-width: 60px;
   --lh-score-icon-width: calc(var(--body-font-size) / 14 * 16);
   --lh-category-score-width: calc(5 * var(--body-font-size));
@@ -357,7 +355,6 @@
 .lh-audit__title,
 .lh-audit__display-text,
 .lh-audit__score-icon,
-.lh-load-opportunity__sparkline,
 .lh-chevron-container {
   margin: 0 var(--audit-item-gap);
 }
@@ -557,39 +554,8 @@
 
 .lh-audit--load-opportunity .lh-audit__display-text {
   text-align: right;
-  flex: 0 0 calc(3 * var(--body-font-size));
-}
-
-
-/* Sparkline */
-
-.lh-load-opportunity__sparkline {
   flex: 1;
-  margin-top: calc((var(--body-line-height) - var(--lh-sparkline-height)) / 2);
 }
-
-.lh-sparkline {
-  height: var(--lh-sparkline-height);
-  width: 100%;
-}
-
-.lh-sparkline__bar {
-  height: 100%;
-  float: right;
-}
-
-.lh-audit--pass .lh-sparkline__bar {
-  background: var(--pass-color);
-}
-
-.lh-audit--average .lh-sparkline__bar {
-  background: var(--average-color);
-}
-
-.lh-audit--fail .lh-sparkline__bar {
-  background: var(--fail-color);
-}
-
 
 
 /* Filmstrip */

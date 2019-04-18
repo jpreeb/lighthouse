@@ -54,10 +54,9 @@ class PerformanceCategoryRenderer extends CategoryRenderer {
   /**
    * @param {LH.ReportResult.AuditRef} audit
    * @param {number} index
-   * @param {number} scale
    * @return {Element}
    */
-  _renderOpportunity(audit, index, scale) {
+  _renderOpportunity(audit, index) {
     const oppTmpl = this.dom.cloneTemplate('#tmpl-lh-opportunity', this.templateContext);
     const element = this.populateAuditValues(audit, index, oppTmpl);
     element.id = audit.result.id;
@@ -72,22 +71,18 @@ class PerformanceCategoryRenderer extends CategoryRenderer {
 
     // Overwrite the displayValue with opportunity's wastedMs
     const displayEl = this.dom.find('.lh-audit__display-text', element);
-    const sparklineWidthPct = `${details.overallSavingsMs / scale * 100}%`;
-    this.dom.find('.lh-sparkline__bar', element).style.width = sparklineWidthPct;
     displayEl.textContent = Util.formatSeconds(details.overallSavingsMs, 0.01);
 
     // Set [title] tooltips
     if (audit.result.displayValue) {
-      const displayValue = audit.result.displayValue;
-      this.dom.find('.lh-load-opportunity__sparkline', element).title = displayValue;
-      displayEl.title = displayValue;
+      displayEl.title = audit.result.displayValue;
     }
 
     return element;
   }
 
   /**
-   * Get an audit's wastedMs to sort the opportunity by, and scale the sparkline width
+   * Get an audit's wastedMs to sort the opportunity by.
    * Opportunities with an error won't have a details object, so MIN_VALUE is returned to keep any
    * erroring opportunities last in sort order.
    * @param {LH.ReportResult.AuditRef} audit
@@ -167,11 +162,6 @@ class PerformanceCategoryRenderer extends CategoryRenderer {
         .sort((auditA, auditB) => this._getWastedMs(auditB) - this._getWastedMs(auditA));
 
     if (opportunityAudits.length) {
-      // Scale the sparklines relative to savings, minimum 2s to not overstate small savings
-      const minimumScale = 2000;
-      const wastedMsValues = opportunityAudits.map(audit => this._getWastedMs(audit));
-      const maxWaste = Math.max(...wastedMsValues);
-      const scale = Math.max(Math.ceil(maxWaste / 1000) * 1000, minimumScale);
       const groupEl = this.renderAuditGroup(groups['load-opportunities']);
       const tmpl = this.dom.cloneTemplate('#tmpl-lh-opportunity-header', this.templateContext);
 
@@ -183,7 +173,7 @@ class PerformanceCategoryRenderer extends CategoryRenderer {
       const headerEl = this.dom.find('.lh-load-opportunity__header', tmpl);
       groupEl.appendChild(headerEl);
       opportunityAudits.forEach((item, i) =>
-          groupEl.appendChild(this._renderOpportunity(item, i, scale)));
+          groupEl.appendChild(this._renderOpportunity(item, i)));
       groupEl.classList.add('lh-audit-group--load-opportunities');
       element.appendChild(groupEl);
     }
