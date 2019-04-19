@@ -23,8 +23,20 @@ const htmlReportAssets = require('../lighthouse-core/report/html/html-report-ass
  */
 function convertToAsciiAndWriteFile(name, content) {
   assert(content);
+
+  /** @type {string} */
+  let prefix;
+  if (name.endsWith('.html')) {
+    // This will not support unicode characters in inline stylesheets or js.
+    prefix = '&#x';
+  } else if (name.endsWith('.css')) {
+    prefix = '\\';
+  } else {
+    prefix = '\\\\u';
+  }
+
   // eslint-disable-next-line no-control-regex
-  const escaped = content.replace(/[^\x00-\x7F]/g, c => '\\\\u' + c.charCodeAt(0).toString(16));
+  const escaped = content.replace(/[^\x00-\x7F]/g, c => prefix + c.charCodeAt(0).toString(16));
   fs.writeFileSync(`${distDir}/${name}`, escaped);
 }
 
