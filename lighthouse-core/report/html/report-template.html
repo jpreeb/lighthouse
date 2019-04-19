@@ -74,6 +74,12 @@ limitations under the License.
           break;
       }
     });
+
+    document.addEventListener('keypress', e => {
+      if (e.key === 'd') {
+        document.body.classList.toggle('dark');
+      }
+    });
   </script>
 </body>
 </html>
