@@ -40,7 +40,7 @@
   --audit-indent: 16px;
   --text-indent: 8px;
   --expandable-indent: 20px;
-  --secondary-text-color: #565656;
+  --secondary-text-color: var(--color-black-800);
   /*--accent-color: #3879d9;*/
   --informative-color: #0c50c7;
   --medium-75-gray: #757575;
@@ -163,6 +163,7 @@
 
   --body-background-color: var(--color-black-900);
   --body-color: var(--color-black-100);
+  --secondary-text-color: var(--color-black-400);
 
   --highlighter-bg: var(--color-black-200);
   --plugin-icon-url: var(--plugin-icon-url-dark);
