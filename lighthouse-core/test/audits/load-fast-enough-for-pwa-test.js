@@ -75,7 +75,8 @@ describe('PWA: load-fast-enough-for-pwa audit', () => {
 
     const settings = {throttlingMethod: 'provided', throttling: {rttMs: 40, throughput: 100000}};
     const result = await FastPWAAudit.audit(artifacts, {settings, computedCache: new Map()});
-    expect(Math.round(result.numericValue)).toEqual(3427); // If not overridden this would be 1582
+    expect(result.numericValue).toBeGreaterThan(2000); // If not overridden this would be 1582
+    expect(Math.round(result.numericValue)).toMatchSnapshot();
   });
 
   it('overrides when throttling is modified but method is not "provided"', async () => {
