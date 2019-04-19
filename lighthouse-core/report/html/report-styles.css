@@ -102,7 +102,7 @@
   --gauge-circle-size-big: 120px;
   --gauge-circle-size: 96px;
   --header-padding: 20px 0 20px 0;
-  --highlighter-bg: var(--color-black);
+  --highlighter-bg: var(--color-black-400);
   --icon-shape-size: 12px;
   --icon-square-size: calc(var(--icon-shape-size) * 0.88);
   --plugin-badge-bg: var(--color-white);
@@ -166,7 +166,8 @@
   --highlighter-bg: var(--color-black-600);
   /* --plugin-icon-url: url(images/ic_extension_white_24dp.svg); */
 
-  --medium-50-gray: var(--medium-75-gray);
+  --medium-50-gray: #757575;
+  --medium-75-gray: var(--color-white);
 }
 
 @media only screen and (max-width: 480px) {
@@ -335,7 +336,7 @@
   color: hsl(174, 100%, 27%);
 }
 .lh-node:hover {
-    background: hsl(0, 0%, 98%);
+    background: var(--highlighter-bg);
     border-radius: 2px;
 }
 
@@ -387,7 +388,6 @@
   display: none;
 }
 
-.lh-category-header__description,
 .lh-audit__description,
 .lh-audit__stackpack {
   color: var(--secondary-text-color);
@@ -1013,10 +1013,9 @@
 }
 
 .lh-table thead {
-  background: var(--lh-table-header-bg);
+  background-color: var(--lh-table-higlight-bg);
 }
 .lh-table thead th {
-  color: var(--medium-75-gray);
   font-weight: normal;
   word-wrap: normal;
 }
