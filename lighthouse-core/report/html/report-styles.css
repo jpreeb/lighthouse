@@ -42,7 +42,7 @@
   --expandable-indent: 20px;
   --secondary-text-color: var(--color-black-800);
   /*--accent-color: #3879d9;*/
-  --informative-color: #0c50c7;
+  --informative-color: var(--color-blue-900);
   --medium-75-gray: #757575;
   --medium-50-gray: hsl(210, 17%, 98%);
   --medium-100-gray: hsl(200, 12%, 95%);
@@ -93,6 +93,8 @@
   --color-red-700: #EB0F00;
   --color-red: #FF4E42;
   --color-white: #FFFFFF;
+  --color-blue-200: #90CAF9;
+  --color-blue-900: #0D47A1;
 
   /* TODO(cjamcl) clean up unused variables. */
   --audits-margin-bottom: 40px;
@@ -167,6 +169,8 @@
 
   --highlighter-bg: var(--color-black-200);
   --plugin-icon-url: var(--plugin-icon-url-dark);
+
+  --informative-color: var(--color-blue-200);
 
   --medium-50-gray: #757575;
   --medium-75-gray: var(--color-white);
@@ -266,7 +270,7 @@
 
 .lh-audit-group a,
 .lh-category-header__description a {
-  color: #0c50c7;
+  color: var(--informative-color);
 }
 
 .lh-audit__description, .lh-audit__stackpack {
