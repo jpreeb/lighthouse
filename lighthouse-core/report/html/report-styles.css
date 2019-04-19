@@ -19,7 +19,7 @@
   --text-font-family: Roboto, Helvetica, Arial, sans-serif;
   --monospace-font-family: 'Roboto Mono', 'Menlo', 'dejavu sans mono', 'Consolas', 'Lucida Console', monospace;
   --body-background-color: #fff;
-  --body-color: var(--color-black-900);
+  --body-text-color: var(--color-black-900);
   --body-font-size: 16px;
   --body-line-height: 24px;
   --subheader-font-size: 14px;
@@ -162,7 +162,7 @@
   --env-item-bg: rgba(0, 0, 0, 0.5);
 
   --body-background-color: var(--color-black-900);
-  --body-color: var(--color-black-100);
+  --body-text-color: var(--color-black-100);
   --secondary-text-color: var(--color-black-400);
 
   --highlighter-bg: var(--color-black-200);
@@ -241,7 +241,7 @@
   line-height: var(--body-line-height);
   background: var(--body-background-color);
   scroll-behavior: smooth;
-  color: var(--body-color);
+  color: var(--body-text-color);
 }
 
 .lh-root :focus {
