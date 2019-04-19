@@ -31,9 +31,9 @@ module.exports = [
       requestedUrl: 'http://localhost:10200/tricky-main-thread.html?setTimeout',
       finalUrl: 'http://localhost:10200/tricky-main-thread.html?setTimeout',
       audits: {
-        interactive: {
+        'interactive': {
           // Make sure all of the CPU time is reflected in the perf metrics as well.
-          score: '<.2'
+          score: '<.2',
         },
         'bootup-time': {
           details: {
@@ -54,9 +54,9 @@ module.exports = [
       requestedUrl: 'http://localhost:10200/tricky-main-thread.html?fetch',
       finalUrl: 'http://localhost:10200/tricky-main-thread.html?fetch',
       audits: {
-        interactive: {
+        'interactive': {
           // Make sure all of the CPU time is reflected in the perf metrics as well.
-          score: '<.2'
+          score: '<.2',
         },
         'bootup-time': {
           details: {
