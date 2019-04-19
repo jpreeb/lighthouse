@@ -47,6 +47,17 @@ limitations under the License.
       // is in the document.
       const features = new ReportUIFeatures(dom);
       features.initFeatures(window.__LIGHTHOUSE_JSON__);
+
+      // TODO(cjamcl) - Persist dark mode state.
+      document.addEventListener('keypress', e => {
+        if (e.key === 'd') {
+          document.body.classList.toggle('dark');
+        }
+      });
+
+      document.querySelector('.lh-topbar__logo').addEventListener('click', () => {
+        document.body.classList.toggle('dark');
+      });
     }
     window.addEventListener('DOMContentLoaded', __initLighthouseReport__);
 
@@ -72,12 +83,6 @@ limitations under the License.
         case 'hide':
           logger.hide();
           break;
-      }
-    });
-
-    document.addEventListener('keypress', e => {
-      if (e.key === 'd') {
-        document.body.classList.toggle('dark');
       }
     });
   </script>
