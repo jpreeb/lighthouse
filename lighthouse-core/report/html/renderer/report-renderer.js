@@ -247,10 +247,24 @@ class ReportRenderer {
     reportSection.appendChild(this._renderReportFooter(report));
 
     const reportFragment = this._dom.createFragment();
+
     if (!this._dom.isDevTools()) {
       const topbarDocumentFragment = this._renderReportTopbar(report);
       reportFragment.appendChild(topbarDocumentFragment);
     }
+
+    if (scoreHeader && !this._dom.isDevTools()) {
+      const stickyHeader = this._dom.createElement('div', 'lh-sticky-header');
+      stickyHeader.classList.add('stuck');
+
+      for (const gaugeWrapperEl of this._dom.findAll('.lh-gauge__wrapper', scoreHeader)) {
+        const gaugeWrapperElClone = gaugeWrapperEl.cloneNode(true);
+        stickyHeader.appendChild(gaugeWrapperElClone.cloneNode(true));
+      }
+
+      reportFragment.appendChild(stickyHeader);
+    }
+
     reportFragment.appendChild(headerContainer);
     reportFragment.appendChild(container);
 
