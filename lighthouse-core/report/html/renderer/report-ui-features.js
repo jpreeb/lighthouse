@@ -400,20 +400,12 @@ class ReportUIFeatures {
     stickyHeaderEl.classList.toggle('lh-sticky-header--stuck', showStickyHeader);
 
     // Highlight mini gauge when section is in view.
-    // Use the middle of the viewport as an anchor - the closest category to the middle
-    // is the one "in view".
-    let highlightIndex = 0;
-    let highlightIndexDistance = Number.POSITIVE_INFINITY;
-    const categoryEls = this._document.querySelectorAll('.lh-category');
-    for (const [index, categoryEl] of Object.entries(categoryEls)) {
-      // Normalize to middle of viewport.
-      const distanceToMiddle = categoryEl.getBoundingClientRect().top - window.innerHeight / 2;
-      // Closest negative distance to zero wins.
-      if (distanceToMiddle < 0 && highlightIndexDistance > distanceToMiddle) {
-        highlightIndex = parseInt(index);
-        highlightIndexDistance = -distanceToMiddle;
-      }
-    }
+    // In view = the last category that starts above the middle of the window.
+    const categoryEls = Array.from(this._document.querySelectorAll('.lh-category'));
+    const categoriesAboveTheMiddle =
+      categoryEls.filter(el => el.getBoundingClientRect().top - window.innerHeight / 2 < 0);
+    const highlightIndex =
+      categoriesAboveTheMiddle.length > 0 ? categoriesAboveTheMiddle.length - 1 : 0;
 
     // Category order matches gauge order in sticky header.
     // TODO(hoten): not 100% true yet, need to order gauges like: core, pwa, plugins. Remove
