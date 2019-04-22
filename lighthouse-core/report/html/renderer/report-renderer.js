@@ -255,6 +255,7 @@ class ReportRenderer {
 
     if (scoreHeader && !this._dom.isDevTools()) {
       const stickyHeader = this._dom.createElement('div', 'lh-sticky-header');
+      this._dom.createChildOf(stickyHeader, 'div', 'lh-highlighter');
 
       for (const gaugeWrapperEl of this._dom.findAll('.lh-gauge__wrapper', scoreHeader)) {
         const gaugeWrapperElClone = gaugeWrapperEl.cloneNode(true);
