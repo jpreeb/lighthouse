@@ -167,7 +167,7 @@ limitations under the License.
       opacity: 0;
     }
 
-    .lh-sticky-header.stuck {
+    .lh-sticky-header--stuck {
       pointer-events: auto;
       opacity: 1;
     }
@@ -195,7 +195,7 @@ limitations under the License.
       // Show sticky header when the score scale begins to go underneath the topbar.
       const showStickyHeader =
         topbarEl.getBoundingClientRect().bottom - scoreScaleEl.getBoundingClientRect().top >= 0;
-      stickyHeaderEl.classList.toggle('stuck', showStickyHeader);
+      stickyHeaderEl.classList.toggle('lh-sticky-header--stuck', showStickyHeader);
 
       // Highlight mini gauge when section is in view.
       // Use the middle of the viewport as an anchor - the closest category to the middle
