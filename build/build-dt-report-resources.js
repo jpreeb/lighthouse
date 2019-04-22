@@ -18,21 +18,22 @@ const htmlReportAssets = require('../lighthouse-core/report/html/html-report-ass
 
 /**
  * Used to save cached resources (Runtime.cachedResources). Content must be converted to ascii.
+ * TODO(#8525): potentially remove this.
  * @param {string} name
  * @param {string} content
  */
 function convertToAsciiAndWriteFile(name, content) {
   assert(content);
 
-  /** @type {string} */
-  let unicodeEscapePrefix;
+  let unicodeEscapePrefix = '\\\\u'; // js
   if (name.endsWith('.html')) {
-    // This will not support unicode characters in inline stylesheets or js.
-    unicodeEscapePrefix = '&#x';
+    // Can't support unicode characters in inline stylesheets or js, would have to parse
+    // and apply context-specific escapes. Instead, since no ascii is used in html yet,
+    // punt and throw if any ascii is found.
+    // eslint-disable-next-line no-control-regex
+    assert(!content.match(/[^\x00-\x7F]/));
   } else if (name.endsWith('.css')) {
     unicodeEscapePrefix = '\\';
-  } else {
-    unicodeEscapePrefix = '\\\\u';
   }
 
   const escaped =
