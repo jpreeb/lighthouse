@@ -62,7 +62,7 @@ module.exports = [
           details: {
             items: {
               0: {
-              // TODO: requires async stacks, https://github.com/GoogleChrome/lighthouse/pull/5504
+              // TODO: requires sampling profiler and async stacks, see https://github.com/GoogleChrome/lighthouse/issues/8526
               // url: /main-thread-consumer/,
                 scripting: '>1000',
               },
