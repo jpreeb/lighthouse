@@ -397,7 +397,7 @@ class ReportUIFeatures {
     // Show sticky header when the score scale begins to go underneath the topbar.
     const showStickyHeader =
       topbarEl.getBoundingClientRect().bottom - scoreScaleEl.getBoundingClientRect().top >= 0;
-    stickyHeaderEl.classList.toggle('lh-sticky-header--stuck', showStickyHeader);
+    stickyHeaderEl.classList.toggle('lh-sticky-header--visible', showStickyHeader);
 
     // Highlight mini gauge when section is in view.
     // In view = the last category that starts above the middle of the window.
