@@ -257,9 +257,10 @@ class ReportRenderer {
       const stickyHeader = this._dom.createElement('div', 'lh-sticky-header');
       this._dom.createChildOf(stickyHeader, 'div', 'lh-highlighter');
 
+      // The sticky header is just the score gauges, but styled to be smaller. Just
+      // clone the gauges from the score header.
       for (const gaugeWrapperEl of this._dom.findAll('.lh-gauge__wrapper', scoreHeader)) {
-        const gaugeWrapperElClone = gaugeWrapperEl.cloneNode(true);
-        stickyHeader.appendChild(gaugeWrapperElClone.cloneNode(true));
+        stickyHeader.appendChild(gaugeWrapperEl.cloneNode(true));
       }
 
       reportFragment.appendChild(stickyHeader);
