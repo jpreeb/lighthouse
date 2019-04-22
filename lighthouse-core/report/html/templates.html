@@ -210,6 +210,10 @@ limitations under the License.
           highlightIndexDistance = -distanceToMiddle;
         }
       }
+
+      // Category order matches gauge order in sticky header.
+      // TODO(hoten): not 100% true yet, need to order gauges like: core, pwa, plugins. Remove
+      // this comment when that is done.
       const gaugeToHighlight = stickyHeaderEl.querySelectorAll('.lh-gauge__wrapper')[highlightIndex];
       highlightEl.style.left = gaugeToHighlight.getBoundingClientRect().left + 'px';
     }
