@@ -40,6 +40,14 @@ class ReportUIFeatures {
     this._copyAttempt = false;
     /** @type {HTMLElement} */
     this.exportButton; // eslint-disable-line no-unused-expressions
+    /** @type {HTMLElement} */
+    this.topbarEl; // eslint-disable-line no-unused-expressions
+    /** @type {HTMLElement} */
+    this.scoreScaleEl; // eslint-disable-line no-unused-expressions
+    /** @type {HTMLElement} */
+    this.stickyHeaderEl; // eslint-disable-line no-unused-expressions
+    /** @type {HTMLElement} */
+    this.highlightEl; // eslint-disable-line no-unused-expressions
 
     this.onMediaQueryChange = this.onMediaQueryChange.bind(this);
     this.onCopy = this.onCopy.bind(this);
@@ -62,6 +70,7 @@ class ReportUIFeatures {
     this.json = report;
     this._setupMediaQueryListeners();
     this._setupExportButton();
+    this._setupStickyHeaderElements();
     this._setUpCollapseDetailsAfterPrinting();
     this._resetUIState();
     this._document.addEventListener('keydown', this.printShortCutDetect);
@@ -106,6 +115,13 @@ class ReportUIFeatures {
 
     const dropdown = this._dom.find('.lh-export__dropdown', this._document);
     dropdown.addEventListener('click', this.onExport);
+  }
+
+  _setupStickyHeaderElements() {
+    this.topbarEl = this._dom.find('.lh-topbar', this._document);
+    this.scoreScaleEl = this._dom.find('.lh-scorescale', this._document);
+    this.stickyHeaderEl = this._dom.find('.lh-sticky-header', this._document);
+    this.highlightEl = this._dom.find('.lh-highlighter', this._document);
   }
 
   /**
@@ -388,16 +404,11 @@ class ReportUIFeatures {
   }
 
   _handleStickyHeader() {
-    const topbarEl = this._document.querySelector('.lh-topbar');
-    const scoreScaleEl = this._document.querySelector('.lh-scorescale');
-    const stickyHeaderEl = this._document.querySelector('.lh-sticky-header');
-    const highlightEl = this._document.querySelector('.lh-highlighter');
-    if (!topbarEl || !scoreScaleEl || !stickyHeaderEl || !highlightEl) return;
-
     // Show sticky header when the score scale begins to go underneath the topbar.
-    const showStickyHeader =
-      topbarEl.getBoundingClientRect().bottom - scoreScaleEl.getBoundingClientRect().top >= 0;
-    stickyHeaderEl.classList.toggle('lh-sticky-header--visible', showStickyHeader);
+    const topbarBottom = this.topbarEl.getBoundingClientRect().bottom;
+    const scoreScaleTop = this.scoreScaleEl.getBoundingClientRect().top;
+    const showStickyHeader = topbarBottom >= scoreScaleTop;
+    this.stickyHeaderEl.classList.toggle('lh-sticky-header--visible', showStickyHeader);
 
     // Highlight mini gauge when section is in view.
     // In view = the last category that starts above the middle of the window.
@@ -410,9 +421,9 @@ class ReportUIFeatures {
     // Category order matches gauge order in sticky header.
     // TODO(hoten): not 100% true yet, need to order gauges like: core, pwa, plugins. Remove
     // this comment when that is done.
-    const gaugeToHighlight = stickyHeaderEl.querySelectorAll('.lh-gauge__wrapper')[highlightIndex];
-    (/** @type {HTMLElement} */ (highlightEl)).style.left =
-      gaugeToHighlight.getBoundingClientRect().left + 'px';
+    const gaugeWrapperEls = this.stickyHeaderEl.querySelectorAll('.lh-gauge__wrapper');
+    const gaugeToHighlight = gaugeWrapperEls[highlightIndex];
+    this.highlightEl.style.left = gaugeToHighlight.getBoundingClientRect().left + 'px';
   }
 }
 
