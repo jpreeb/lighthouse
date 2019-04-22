@@ -161,6 +161,7 @@ limitations under the License.
       background-color: var(--color-sticky-header-bg);
       border-bottom: 1px solid var(--color-black-200);
       padding-top: var(--score-container-padding);
+      padding-bottom: 8px;
       z-index: 1000;
       pointer-events: none;
       opacity: 0;
@@ -218,7 +219,7 @@ limitations under the License.
       highlightEl.style.left = gaugeToHighlight.getBoundingClientRect().left + 'px';
     }
     document.addEventListener('scroll', handleStickyHeader);
-    document.addEventListener('resize', handleStickyHeader);
+    window.addEventListener('resize', handleStickyHeader);
   </script>
   <div class="lh-scores-wrapper">
     <div class="lh-scores-container"></div>
