@@ -176,6 +176,19 @@ limitations under the License.
       display: none;
     }
   </style>
+  <script>
+    // Show sticky header when the score scale begins to go underneath the topbar.
+    function handleStickyHeader() {
+      const topbarEl = document.querySelector('.lh-topbar');
+      const scoreScaleEl = document.querySelector('.lh-scorescale');
+      const stickyHeaderEl = document.querySelector('.lh-sticky-header');
+      const showStickyHeader =
+        topbarEl.getBoundingClientRect().bottom - scoreScaleEl.getBoundingClientRect().top >= 0;
+      stickyHeaderEl.classList.toggle('stuck', showStickyHeader);
+    }
+    document.addEventListener('scroll', handleStickyHeader);
+    document.addEventListener('resize', handleStickyHeader);
+  </script>
   <div class="lh-scores-wrapper">
     <div class="lh-scores-container"></div>
   </div>

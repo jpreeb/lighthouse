@@ -255,7 +255,6 @@ class ReportRenderer {
 
     if (scoreHeader && !this._dom.isDevTools()) {
       const stickyHeader = this._dom.createElement('div', 'lh-sticky-header');
-      stickyHeader.classList.add('stuck');
 
       for (const gaugeWrapperEl of this._dom.findAll('.lh-gauge__wrapper', scoreHeader)) {
         const gaugeWrapperElClone = gaugeWrapperEl.cloneNode(true);
