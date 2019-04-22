@@ -48,6 +48,7 @@ class ReportUIFeatures {
     this.onKeyDown = this.onKeyDown.bind(this);
     this.printShortCutDetect = this.printShortCutDetect.bind(this);
     this.onChevronClick = this.onChevronClick.bind(this);
+    this._handleStickyHeader = this._handleStickyHeader.bind(this);
   }
 
   /**
@@ -65,6 +66,8 @@ class ReportUIFeatures {
     this._resetUIState();
     this._document.addEventListener('keydown', this.printShortCutDetect);
     this._document.addEventListener('copy', this.onCopy);
+    this._document.addEventListener('scroll', this._handleStickyHeader);
+    window.addEventListener('resize', this._handleStickyHeader);
   }
 
   /**
@@ -379,6 +382,42 @@ class ReportUIFeatures {
     // cleanup.
     this._document.body.removeChild(a);
     setTimeout(_ => URL.revokeObjectURL(href), 500);
+  }
+
+  _handleStickyHeader() {
+    const topbarEl = this._document.querySelector('.lh-topbar');
+    const scoreScaleEl = this._document.querySelector('.lh-scorescale');
+    const stickyHeaderEl = this._document.querySelector('.lh-sticky-header');
+    const highlightEl = this._document.querySelector('.lh-highlighter');
+    if (!topbarEl || !scoreScaleEl || !stickyHeaderEl || !highlightEl) return;
+
+    // Show sticky header when the score scale begins to go underneath the topbar.
+    const showStickyHeader =
+      topbarEl.getBoundingClientRect().bottom - scoreScaleEl.getBoundingClientRect().top >= 0;
+    stickyHeaderEl.classList.toggle('lh-sticky-header--stuck', showStickyHeader);
+
+    // Highlight mini gauge when section is in view.
+    // Use the middle of the viewport as an anchor - the closest category to the middle
+    // is the one "in view".
+    let highlightIndex = 0;
+    let highlightIndexDistance = Number.POSITIVE_INFINITY;
+    const categoryEls = this._document.querySelectorAll('.lh-category');
+    for (const [index, categoryEl] of Object.entries(categoryEls)) {
+      // Normalize to middle of viewport.
+      const distanceToMiddle = categoryEl.getBoundingClientRect().top - window.innerHeight / 2;
+      // Closest negative distance to zero wins.
+      if (distanceToMiddle < 0 && highlightIndexDistance > distanceToMiddle) {
+        highlightIndex = parseInt(index);
+        highlightIndexDistance = -distanceToMiddle;
+      }
+    }
+
+    // Category order matches gauge order in sticky header.
+    // TODO(hoten): not 100% true yet, need to order gauges like: core, pwa, plugins. Remove
+    // this comment when that is done.
+    const gaugeToHighlight = stickyHeaderEl.querySelectorAll('.lh-gauge__wrapper')[highlightIndex];
+    // @ts-ignore
+    highlightEl.style.left = gaugeToHighlight.getBoundingClientRect().left + 'px';
   }
 }
 

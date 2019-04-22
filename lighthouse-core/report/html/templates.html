@@ -185,42 +185,6 @@ limitations under the License.
       left: 0;
     }
   </style>
-  <script>
-    function handleStickyHeader() {
-      const topbarEl = document.querySelector('.lh-topbar');
-      const scoreScaleEl = document.querySelector('.lh-scorescale');
-      const stickyHeaderEl = document.querySelector('.lh-sticky-header');
-      const highlightEl = document.querySelector('.lh-highlighter');
-
-      // Show sticky header when the score scale begins to go underneath the topbar.
-      const showStickyHeader =
-        topbarEl.getBoundingClientRect().bottom - scoreScaleEl.getBoundingClientRect().top >= 0;
-      stickyHeaderEl.classList.toggle('lh-sticky-header--stuck', showStickyHeader);
-
-      // Highlight mini gauge when section is in view.
-      // Use the middle of the viewport as an anchor - the closest category to the middle
-      // is the one "in view".
-      let highlightIndex = 0;
-      let highlightIndexDistance = Number.POSITIVE_INFINITY;
-      for (const [index, categoryEl] of Object.entries(document.querySelectorAll('.lh-category'))) {
-        // Normalize to middle of viewport.
-        const distanceToMiddle = categoryEl.getBoundingClientRect().top - window.innerHeight / 2;
-        // Closest negative distance to zero wins.
-        if (distanceToMiddle < 0 && highlightIndexDistance > distanceToMiddle) {
-          highlightIndex = index;
-          highlightIndexDistance = -distanceToMiddle;
-        }
-      }
-
-      // Category order matches gauge order in sticky header.
-      // TODO(hoten): not 100% true yet, need to order gauges like: core, pwa, plugins. Remove
-      // this comment when that is done.
-      const gaugeToHighlight = stickyHeaderEl.querySelectorAll('.lh-gauge__wrapper')[highlightIndex];
-      highlightEl.style.left = gaugeToHighlight.getBoundingClientRect().left + 'px';
-    }
-    document.addEventListener('scroll', handleStickyHeader);
-    window.addEventListener('resize', handleStickyHeader);
-  </script>
   <div class="lh-scores-wrapper">
     <div class="lh-scores-container"></div>
   </div>
