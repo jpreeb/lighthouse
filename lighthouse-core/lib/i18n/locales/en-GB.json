@@ -924,7 +924,7 @@
     "message": "Lighthouse was unable to reliably load the URL that you requested because the page stopped responding."
   },
   "lighthouse-core/lib/lh-error.js | pageLoadFailedInsecure": {
-    "message": "The URL that you have provided does not have valid security credentials. {securityMessages}"
+    "message": "The URL that you have provided does not have valid SSL certificate. {securityMessages}"
   },
   "lighthouse-core/lib/lh-error.js | pageLoadFailedWithDetails": {
     "message": "Lighthouse was unable to reliably load the page that you requested. Make sure that you are testing the correct URL and that the server is properly responding to all requests. (Details: {errorDetails})"

@@ -1236,7 +1236,7 @@
     "description": "Error message explaining that Lighthouse couldn't complete because the page has stopped responding to its instructions."
   },
   "lighthouse-core/lib/lh-error.js | pageLoadFailedInsecure": {
-    "message": "The URL you have provided does not have valid security credentials. {securityMessages}",
+    "message": "The URL you have provided does not have valid SSL certificate. {securityMessages}",
     "description": "Error message explaining that the credentials included in the Lighthouse run were invalid, so the URL cannot be accessed. securityMessages will be replaced with one or more strings from the browser explaining what was insecure about the page load."
   },
   "lighthouse-core/lib/lh-error.js | pageLoadFailedWithDetails": {

@@ -6,6 +6,7 @@
 'use strict';
 
 /** @typedef {typeof import('./extension-entry.js') & {console: typeof console}} BackgroundPage */
+/** @typedef {import('../../../lighthouse-core/lib/lh-error.js')} LighthouseError */
 
 /**
  * Error strings that indicate a problem in how Lighthouse was run, not in
@@ -81,10 +82,10 @@ function find(query, context = document) {
 }
 
 /**
- * @param {Error} err
+ * @param {LighthouseError} err
  * @return {HTMLButtonElement}
  */
-function buildReportErrorLink(err) {
+function buildErrorCopyButton(err) {
   const issueBody = `
 **Lighthouse Version**: ${getLighthouseVersion()}
 **Lighthouse Commit**: ${getLighthouseCommitHash()}
@@ -97,23 +98,23 @@ ${err.stack}
 \`\`\`
     `;
 
-  const reportErrorEl = document.createElement('button');
-  reportErrorEl.className = 'button button--report-error';
-  reportErrorEl.textContent = 'Copy to clipboard';
+  const errorButtonDefaultText = 'Copy details to clipboard 📋';
+  const errorButtonEl = document.createElement('button');
+  errorButtonEl.className = 'button button--report-error';
+  errorButtonEl.textContent = errorButtonDefaultText;
 
-  reportErrorEl.addEventListener('click', async () => {
-    try {
-      // @ts-ignore
-      await navigator.clipboard.writeText(issueBody);
-      reportErrorEl.textContent = 'Copied to clipboard';
-      setTimeout(() => {
-        reportErrorEl.textContent = 'Copy to clipboard';
-      }, 1000);
-    } catch (err) {
-    }
+  errorButtonEl.addEventListener('click', async () => {
+    // @ts-ignore - tsc doesn't include `clipboard` on `navigator`
+    await navigator.clipboard.writeText(issueBody);
+    errorButtonEl.textContent = 'Copied to clipboard 📋';
+
+    // Return button to inviting state after timeout.
+    setTimeout(() => {
+      errorButtonEl.textContent = errorButtonDefaultText;
+    }, 1000);
   });
 
-  return reportErrorEl;
+  return errorButtonEl;
 }
 
 /**
@@ -188,7 +189,8 @@ async function onGenerateReportButtonClick(background, settings) {
     // Check for errors in how the user ran Lighthouse and replace with a more
     // helpful message (and remove 'Report Error' link).
     for (const [test, replacement] of Object.entries(NON_BUG_ERROR_MESSAGES)) {
-      if (err.message.includes(test) || err.friendlyMessage.includes(test)) {
+      if (err.message.includes(test) ||
+          (err.friendlyMessage && err.friendlyMessage.includes(test))) {
         message = replacement;
         includeReportLink = false;
         break;
@@ -199,7 +201,7 @@ async function onGenerateReportButtonClick(background, settings) {
 
     if (includeReportLink) {
       feedbackEl.className = 'feedback feedback-error';
-      feedbackEl.appendChild(buildReportErrorLink(err));
+      feedbackEl.appendChild(buildErrorCopyButton(/** @type {LighthouseError} */ (err)));
     }
 
     hideRunningSubpage();
