@@ -411,8 +411,8 @@ class ReportUIFeatures {
     // TODO(hoten): not 100% true yet, need to order gauges like: core, pwa, plugins. Remove
     // this comment when that is done.
     const gaugeToHighlight = stickyHeaderEl.querySelectorAll('.lh-gauge__wrapper')[highlightIndex];
-    // @ts-ignore
-    highlightEl.style.left = gaugeToHighlight.getBoundingClientRect().left + 'px';
+    (/** @type {HTMLElement} */ (highlightEl)).style.left =
+      gaugeToHighlight.getBoundingClientRect().left + 'px';
   }
 }
 
