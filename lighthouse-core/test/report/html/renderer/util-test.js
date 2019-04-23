@@ -152,7 +152,25 @@ describe('util helpers', () => {
 
       // Original audit results should be restored.
       const preparedResult = Util.prepareReportResult(clonedSampleResult);
+
+      // Delete stack packs from preparedResult
+      Object.values(preparedResult.audits).forEach(audit => {
+        if (audit.stackPacks) {
+          delete audit.stackPacks;
+        }
+      });
+
       assert.deepStrictEqual(preparedResult.audits, sampleResult.audits);
+    });
+
+    it('makes stack pack objects', () => {
+      const clonedSampleResult = JSON.parse(JSON.stringify(sampleResult));
+
+      // Original audit results should be restored.
+      const preparedResult = Util.prepareReportResult(clonedSampleResult);
+
+      // Stack Pack should exist
+      assert(preparedResult.audits['unused-css-rules'].stackPacks);
     });
   });
 });
