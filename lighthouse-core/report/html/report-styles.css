@@ -122,7 +122,6 @@
   --score-title-line-height-big: 36px;
   --score-title-line-height: 26px;
   --section-padding: 40px;
-  --shape-margin: 7px 12px 0 4px;
   --topbar-bg: var(--color-black-100);
   --topbar-height: 36px;
   --topbar-icon-size: 24px;
@@ -199,7 +198,6 @@
     --score-title-line-height-big: 26px;
     --score-title-line-height: 20px;
     --section-padding: 24px;
-    --shape-margin: 5px 12px 0 2px;
     --topbar-height: 32px;
     --topbar-icon-size: 20px;
   }

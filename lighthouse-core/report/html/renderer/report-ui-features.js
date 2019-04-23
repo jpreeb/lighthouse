@@ -63,6 +63,7 @@ class ReportUIFeatures {
     this._setupExportButton();
     this._setUpCollapseDetailsAfterPrinting();
     this._resetUIState();
+    this._registerDarkThemeToggles();
     this._document.addEventListener('keydown', this.printShortCutDetect);
     this._document.addEventListener('copy', this.onCopy);
   }
@@ -379,6 +380,24 @@ class ReportUIFeatures {
     // cleanup.
     this._document.body.removeChild(a);
     setTimeout(_ => URL.revokeObjectURL(href), 500);
+  }
+
+  /**
+   * Register listeners to toggle dark theme via clicking on LH logo or pressing 'd'.
+   * @private
+   */
+  _registerDarkThemeToggles() {
+    // TODO(#8185) - Persist dark mode state.
+    this._document.addEventListener('keyup', e => {
+      if (e.key === 'd') {
+        this._document.body.classList.toggle('dark');
+      }
+    });
+
+    const topbarLogo = this._dom.find('.lh-topbar__logo', this._document);
+    topbarLogo.addEventListener('click', () => {
+      this._document.body.classList.toggle('dark');
+    });
   }
 }
 
