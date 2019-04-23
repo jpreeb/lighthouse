@@ -459,10 +459,8 @@ class Util {
     }
 
     let deviceEmulation = 'No emulation';
-    if (!settings.disableDeviceEmulation) {
-      if (settings.emulatedFormFactor === 'mobile') deviceEmulation = 'Emulated Nexus 5X';
-      if (settings.emulatedFormFactor === 'desktop') deviceEmulation = 'Emulated Desktop';
-    }
+    if (settings.emulatedFormFactor === 'mobile') deviceEmulation = 'Emulated Nexus 5X';
+    if (settings.emulatedFormFactor === 'desktop') deviceEmulation = 'Emulated Desktop';
 
     return {
       deviceEmulation,
@@ -523,6 +521,13 @@ class Util {
     });
 
     return lines.filter(line => lineNumbersToKeep.has(line.lineNumber));
+  }
+
+  /**
+   * @param {string} categoryId
+   */
+  static isPluginCategory(categoryId) {
+    return categoryId.startsWith('lighthouse-plugin-');
   }
 }
 
