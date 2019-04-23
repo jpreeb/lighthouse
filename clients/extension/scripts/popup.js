@@ -82,16 +82,17 @@ function find(query, context = document) {
 }
 
 /**
- * @param {LighthouseError} err
+ * @param {string} message
+ * @param {Error} err
  * @return {HTMLButtonElement}
  */
-function buildErrorCopyButton(err) {
+function buildErrorCopyButton(message, err) {
   const issueBody = `
 **Lighthouse Version**: ${getLighthouseVersion()}
 **Lighthouse Commit**: ${getLighthouseCommitHash()}
 **Chrome Version**: ${getChromeVersion()}
 **Initial URL**: ${siteURL}
-**Error Message**: ${err.friendlyMessage || err.message}
+**Error Message**: ${message}
 **Stack Trace**:
 \`\`\`
 ${err.stack}
@@ -201,7 +202,7 @@ async function onGenerateReportButtonClick(background, settings) {
 
     if (includeReportLink) {
       feedbackEl.className = 'feedback feedback-error';
-      feedbackEl.appendChild(buildErrorCopyButton(/** @type {LighthouseError} */ (err)));
+      feedbackEl.appendChild(buildErrorCopyButton(message, err));
     }
 
     hideRunningSubpage();
