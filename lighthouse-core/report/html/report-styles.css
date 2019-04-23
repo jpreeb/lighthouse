@@ -272,7 +272,9 @@
 }
 
 .lh-audit-group a,
-.lh-category-header__description a {
+.lh-category-header__description a,
+.lh-audit__description a,
+.lh-footer a {
   color: var(--informative-color);
 }
 
