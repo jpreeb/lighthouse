@@ -94,16 +94,14 @@ describe('ReportRenderer', () => {
         'new report appended to container');
     });
 
-    it('renders a header', () => {
-      const header = renderer._renderReportHeader(sampleResults);
-      assert.ok(header.querySelector('.lh-export'), 'contains export button');
+    it('renders a topbar', () => {
+      const topbar = renderer._renderReportTopbar(sampleResults);
+      assert.equal(topbar.querySelector('.lh-topbar__url').textContent, sampleResults.finalUrl);
+    });
 
-      assert.ok(header.querySelector('.lh-config__timestamp').textContent.match(TIMESTAMP_REGEX),
-          'formats the generated datetime');
-      assert.equal(header.querySelector('.lh-metadata__url').textContent, sampleResults.finalUrl);
-      const url = header.querySelector('.lh-metadata__url');
-      assert.equal(url.textContent, sampleResults.finalUrl);
-      assert.equal(url.href, sampleResults.finalUrl);
+    it('renders a header', () => {
+      const header = renderer._renderReportHeader();
+      assert.ok(header.querySelector('.lh-scores-container'), 'contains score container');
     });
 
     it('renders special score gauges after the mainstream ones', () => {
@@ -124,6 +122,26 @@ describe('ReportRenderer', () => {
           assert.ok(gauge.classList.contains('lh-gauge--pwa__wrapper'));
         }
       }
+    });
+
+    it('renders plugin score gauge', () => {
+      const sampleResultsCopy = JSON.parse(JSON.stringify(sampleResults));
+      sampleResultsCopy.categories['lighthouse-plugin-someplugin'] = {
+        id: 'lighthouse-plugin-someplugin',
+        title: 'Some Plugin',
+        auditRefs: [],
+      };
+      const container = renderer._dom._document.body;
+      const output = renderer.renderReport(sampleResultsCopy, container);
+      const scoresHeaderElem = output.querySelector('.lh-scores-header');
+
+      const gaugeCount = scoresHeaderElem.querySelectorAll('.lh-gauge').length;
+      const pluginGaugeCount =
+        scoresHeaderElem.querySelectorAll('.lh-gauge__wrapper--plugin').length;
+
+      // 5 core categories + the 1 plugin.
+      assert.equal(6, gaugeCount);
+      assert.equal(1, pluginGaugeCount);
     });
 
     it('should not mutate a report object', () => {
@@ -177,7 +195,8 @@ describe('ReportRenderer', () => {
     assert.equal(renderer._templateContext, otherDocument);
   });
 
-  it('should render an all 100 report with fireworks', () => {
+  // Fireworks temporarily canceled. See #8185
+  test.skip('should render an all 100 report with fireworks', () => {
     const container = renderer._dom._document.body;
 
     sampleResults.reportCategories.forEach(element => {
