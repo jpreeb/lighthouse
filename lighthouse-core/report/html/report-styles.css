@@ -448,7 +448,7 @@
 }
 
 .lh-audit__header:hover {
-  background-color: var(--highlighter-bg);
+  background-color: var(--color-black-200);
 }
 
 /* Hide the expandable arrow icon, three ways: via the CSS Counter Styles spec, for webkit/blink browsers, hiding the polyfilled icon */
