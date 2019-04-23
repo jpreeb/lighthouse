@@ -9,15 +9,9 @@
  * URL shim so we keep our code DRY
  */
 
-/* global self */
-
-/** @typedef {import('url').URL} OriginalURL */
+/* global URL */
 
 const Util = require('../report/html/renderer/util.js');
-
-// Type cast so tsc sees window.URL and require('url').URL as sufficiently equivalent.
-const URL = /** @type {!Window["URL"]} */ (typeof self !== 'undefined' && self.URL) ||
-    require('url').URL;
 
 const allowedProtocols = [
   'https:', 'http:', 'chrome:', 'chrome-extension:',
@@ -94,29 +88,10 @@ class URLShim extends URL {
   }
 
   /**
-   * Gets the tld of a domain
-   *
-   * @param {string} hostname
-   * @return {string} tld
-   */
-  static getTld(hostname) {
-    return Util.getTld(hostname);
-  }
-
-  /**
-   * Returns a primary domain for provided hostname (e.g. www.example.com -> example.com).
-   * @param {string|OriginalURL} url hostname or URL object
-   * @returns {string}
-   */
-  static getRootDomain(url) {
-    return Util.getRootDomain(url);
-  }
-
-  /**
    * Check if rootDomains matches
    *
-   * @param {string|OriginalURL} urlA
-   * @param {string|OriginalURL} urlB
+   * @param {string|URL} urlA
+   * @param {string|URL} urlB
    */
   static rootDomainsMatch(urlA, urlB) {
     let urlAInfo;
@@ -133,8 +108,8 @@ class URLShim extends URL {
     }
 
     // get the string before the tld
-    const urlARootDomain = URLShim.getRootDomain(urlAInfo);
-    const urlBRootDomain = URLShim.getRootDomain(urlBInfo);
+    const urlARootDomain = Util.getRootDomain(urlAInfo);
+    const urlBRootDomain = Util.getRootDomain(urlBInfo);
 
     return urlARootDomain === urlBRootDomain;
   }

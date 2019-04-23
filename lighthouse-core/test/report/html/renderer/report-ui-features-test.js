@@ -10,7 +10,6 @@
 const assert = require('assert');
 const fs = require('fs');
 const jsdom = require('jsdom');
-const URL = require('url').URL;
 const Util = require('../../../../report/html/renderer/util.js');
 const DOM = require('../../../../report/html/renderer/dom.js');
 const DetailsRenderer = require('../../../../report/html/renderer/details-renderer.js');
@@ -32,7 +31,6 @@ describe('ReportUIFeatures', () => {
   let sampleResults;
 
   beforeAll(() => {
-    global.URL = URL;
     global.Util = Util;
     global.ReportUIFeatures = ReportUIFeatures;
     global.CriticalRequestChainRenderer = CriticalRequestChainRenderer;
@@ -80,7 +78,6 @@ describe('ReportUIFeatures', () => {
 
   afterAll(() => {
     global.self = undefined;
-    global.URL = undefined;
     global.Util = undefined;
     global.ReportUIFeatures = undefined;
     global.matchMedia = undefined;

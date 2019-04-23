@@ -16,13 +16,7 @@
  */
 'use strict';
 
-/* globals self */
-
-/** @typedef {import('url').URL} OriginalURL */
-
-// Type cast so tsc sees window.URL and require('url').URL as sufficiently equivalent.
-const URL = /** @type {!Window["URL"]} */ (typeof self !== 'undefined' && self.URL) ||
-    require('url').URL;
+/* globals self, URL */
 
 const ELLIPSIS = '\u2026';
 const NBSP = '\xa0';
@@ -267,7 +261,7 @@ class Util {
   }
 
   /**
-   * @param {OriginalURL} parsedUrl
+   * @param {URL} parsedUrl
    * @param {{numPathParts?: number, preserveQuery?: boolean, preserveHost?: boolean}=} options
    * @return {string}
    */
@@ -351,15 +345,15 @@ class Util {
   }
 
   /**
-   * @param {string|OriginalURL} value
-   * @return {OriginalURL}
+   * @param {string|URL} value
+   * @return {URL}
    */
   static createOrReturnURL(value) {
     if (value instanceof URL) {
       return value;
     }
 
-    return new URL(/** @type {string} */ (value));
+    return new URL(value);
   }
 
   /**
@@ -380,7 +374,7 @@ class Util {
 
   /**
    * Returns a primary domain for provided hostname (e.g. www.example.com -> example.com).
-   * @param {string|OriginalURL} url hostname or URL object
+   * @param {string|URL} url hostname or URL object
    * @returns {string}
    */
   static getRootDomain(url) {

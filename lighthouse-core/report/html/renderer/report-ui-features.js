@@ -23,7 +23,7 @@
  * the report.
  */
 
-/* globals self URL Blob CustomEvent getFilenamePrefix Util window */
+/* globals getFilenamePrefix Util */
 
 /** @typedef {import('./dom.js')} DOM */
 

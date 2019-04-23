@@ -105,32 +105,6 @@ describe('URL Shim', () => {
     assert.equal(URL.getOrigin(urlD), null);
   });
 
-  describe('getTld', () => {
-    // we just test if Util gets called as it has tests in util.js
-    it('returns the correct tld', () => {
-      const Util = require('../../report/html/renderer/util');
-      const originalFn = Util.getTld;
-      Util.getTld = jest.fn(() => '.com');
-      expect(URL.getTld('example.com')).toBe('.com');
-      expect(Util.getTld).toBeCalledWith('example.com');
-
-      Util.getTld = originalFn;
-    });
-  });
-
-  describe('getRootDomain', () => {
-    // we just test if Util gets called as it has tests in util.js
-    it('returns the correct rootDomain', () => {
-      const Util = require('../../report/html/renderer/util');
-      const originalFn = Util.getRootDomain;
-      Util.getRootDomain = jest.fn(() => 'example.com');
-      expect(URL.getRootDomain('www.example.com')).toBe('example.com');
-      expect(Util.getRootDomain).toBeCalledWith('www.example.com');
-
-      Util.getRootDomain = originalFn;
-    });
-  });
-
   describe('rootDomainsMatch', () => {
     it('matches a subdomain and a root domain', () => {
       const urlA = 'http://example.com/js/test.js';
