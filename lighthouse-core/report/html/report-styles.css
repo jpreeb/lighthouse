@@ -169,6 +169,10 @@
     --topbar-height: 32px;
     --topbar-icon-size: 20px;
   }
+
+  .lh-sparkline {
+    display: none;
+  }
 }
 
 .lh-vars.lh-devtools {
