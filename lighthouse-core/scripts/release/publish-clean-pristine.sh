@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 DIRNAME="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-LH_ROOT="$DIRNAME/../.."
+LH_ROOT="$DIRNAME/../../.."
 cd $LH_ROOT
 
 set -euxo pipefail

@@ -5,11 +5,11 @@ TXT_DIM=$(tput setaf 245)
 TXT_RESET=$(tput sgr0)
 
 DIRNAME="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-LH_PRISTINE_ROOT="$DIRNAME/../../../lighthouse-pristine"
+LH_PRISTINE_ROOT="$DIRNAME/../../../../lighthouse-pristine"
 
 set -euxo pipefail
 
-bash "$DIRNAME/publish-prepare-pristine.sh"
+bash "$DIRNAME/release-prepare-pristine.sh"
 
 cd "$LH_PRISTINE_ROOT"
 

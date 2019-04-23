@@ -5,7 +5,7 @@ TXT_DIM=$(tput setaf 245)
 TXT_RESET=$(tput sgr0)
 
 DIRNAME="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-LH_ROOT="$DIRNAME/../.."
+LH_ROOT="$DIRNAME/../../.."
 cd "$LH_ROOT"
 
 set -euxo pipefail
@@ -33,6 +33,7 @@ fi
 # Checkout a new branch for the version commit
 git fetch origin master
 git checkout origin/master
+git log -n 1
 git branch -D "$BRANCH_NAME" || true
 git checkout -b "$BRANCH_NAME"
 

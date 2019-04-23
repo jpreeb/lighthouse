@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 DIRNAME="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-LH_ROOT="$DIRNAME/../.."
+LH_ROOT="$DIRNAME/../../.."
 cd $LH_ROOT
 
 set -euxo pipefail
@@ -24,4 +24,4 @@ git fetch origin
 git fetch --tags
 git checkout -f master
 git reset --hard origin/master
-git clean -fx
+git clean -fdx # Forcibly clean all untracked files and directories, including `.gitignore`d ones.

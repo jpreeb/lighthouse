@@ -32,21 +32,21 @@ We follow [semver](https://semver.org/) versioning semantics (`vMajor.Minor.Patc
 
 ```sh
 # Run the tests
-bash ./lighthouse-core/scripts/publish-test.sh
-# Prepare the commit
-bash ./lighthouse-core/scripts/publish-prepare-commit.sh
+bash ./lighthouse-core/scripts/release/release-test.sh
+# Prepare the commit, replace x.x.x with the desired version
+bash ./lighthouse-core/scripts/release/release-prepare-commit.sh x.x.x
 
 # Open the PR and await merge...
 echo "It's been merged! 🎉"
 
 # Run the tests again :)
-bash ./lighthouse-core/scripts/publish-test.sh
+bash ./lighthouse-core/scripts/release/release-test.sh
 # Package everything for publishing
-bash ./lighthouse-core/scripts/publish-prepare-package.sh
+bash ./lighthouse-core/scripts/release/release-prepare-package.sh
 
 # Upload the extension
 node build/build-extension.js package; cd dist/extension-package/
-echo "Go here: https://chrome.google.com/webstore/developer/edit/blipmdconlkpinefehnmjammfjpmpbjk "
+open https://chrome.google.com/webstore/developer/edit/blipmdconlkpinefehnmjammfjpmpbjk
 echo "Upload the package zip to CWS dev dashboard"
 # Be in lighthouse-extension-owners group
 # Open <https://chrome.google.com/webstore/developer/dashboard>
@@ -55,6 +55,8 @@ echo "Upload the package zip to CWS dev dashboard"
 # Select `lighthouse-4.X.X.zip`
 # _Publish_ at the bottom
 
+# Make sure you're in the Lighthouse pristine repo we just tested.
+cd ../lighthouse-pristine
 # Publish to NPM
 npm publish
 # Publish viewer
