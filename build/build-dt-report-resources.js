@@ -18,7 +18,6 @@ const htmlReportAssets = require('../lighthouse-core/report/html/html-report-ass
 
 /**
  * Used to save cached resources (Runtime.cachedResources). Content must be converted to ascii.
- * TODO(#8525): potentially remove this.
  * @param {string} name
  * @param {string} content
  */
