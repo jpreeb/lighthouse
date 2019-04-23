@@ -231,6 +231,8 @@ describe('Performance: Font Display audit', () => {
   });
 
   it('handles varied font-display declarations', async () => {
+    // Make sure we don't use sourceURL when it's not a valid URL, see https://github.com/GoogleChrome/lighthouse/issues/8534
+    stylesheet.header.sourceURL = 'custom-attribute';
     stylesheet.content = `
       @font-face {
         src: url(font-0.woff);
