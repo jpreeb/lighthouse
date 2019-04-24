@@ -853,6 +853,8 @@
 }
 
 .lh-scorescale-range {
+  display: flex;
+  align-items: center;
   margin: 0 12px;
   font-family: var(--monospace-font-family);
   white-space: nowrap;
@@ -860,11 +862,11 @@
 
 .lh-scorescale-range::before {
   content: '';
-  width: var(--body-font-size);
-  height: calc(var(--body-font-size) * .50);
+  width: 18px;
+  height: 6px;
   border-radius: 10px;
-  display: inline-block;
-  margin: 0 5px;
+  display: block;
+  margin-right: 10px;
 }
 
 .lh-scorescale-range--pass::before {
