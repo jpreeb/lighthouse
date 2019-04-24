@@ -13,10 +13,10 @@
  */
 const NEXUS5X_EMULATION_METRICS = {
   mobile: true,
-  screenWidth: 412,
-  screenHeight: 660,
-  width: 412,
-  height: 660,
+  screenWidth: 375, // iPhone 6/7/8
+  screenHeight: 667, // iPhone 6/7/8
+  width: 375, // iPhone 6/7/8
+  height: 667, // iPhone 6/7/8
   positionX: 0,
   positionY: 0,
   scale: 1,
