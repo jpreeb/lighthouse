@@ -653,7 +653,7 @@
 /* Audit Group */
 
 .lh-audit-group {
-  margin: var(--lh-audit-group-vpadding) 0;
+  margin-bottom: var(--audits-margin-bottom);
 }
 
 .lh-audit-group__header::before {
