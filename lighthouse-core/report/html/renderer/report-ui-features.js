@@ -76,10 +76,7 @@ class ReportUIFeatures {
     this._document.addEventListener('keydown', this.printShortCutDetect);
     this._document.addEventListener('copy', this.onCopy);
     this._document.addEventListener('scroll', this._handleStickyHeader);
-    // window.addEventListener is undefined in jest tests.
-    if (window.addEventListener) {
-      window.addEventListener('resize', this._handleStickyHeader);
-    }
+    window.addEventListener('resize', this._handleStickyHeader);
   }
 
   /**
