@@ -159,6 +159,39 @@ class ReportRenderer {
 
   /**
    * @param {LH.ReportResult} report
+   * @param {CategoryRenderer} categoryRenderer
+   * @param {Record<string, CategoryRenderer>} specificCategoryRenderers
+   * @return {DocumentFragment[]}
+   */
+  _renderScoreGauges(report, categoryRenderer, specificCategoryRenderers) {
+    // Group gauges in this order: default, pwa, plugins.
+    const defaultGauges = [];
+    const customGauges = []; // PWA.
+    const pluginGauges = [];
+
+    for (const category of report.reportCategories) {
+      const renderer = specificCategoryRenderers[category.id] || categoryRenderer;
+      const categoryGauge = renderer.renderScoreGauge(category, report.categoryGroups || {});
+
+      if (Util.isPluginCategory(category.id)) {
+        pluginGauges.push(categoryGauge);
+      } else if (renderer.renderScoreGauge === categoryRenderer.renderScoreGauge) {
+        // The renderer for default categories is just the default CategoryRenderer.
+        // If the functions are equal, then renderer is an instance of CategoryRenderer.
+        // For example, the PWA category uses PwaCategoryRenderer, which overrides
+        // CategoryRenderer.renderScoreGauge, so it would fail this check and be placed
+        // in the customGauges bucket.
+        defaultGauges.push(categoryGauge);
+      } else {
+        customGauges.push(categoryGauge);
+      }
+    }
+
+    return [...defaultGauges, ...customGauges, ...pluginGauges];
+  }
+
+  /**
+   * @param {LH.ReportResult} report
    * @return {DocumentFragment}
    */
   _renderReport(report) {
@@ -223,29 +256,8 @@ class ReportRenderer {
     // }
 
     if (scoreHeader) {
-      // Group gauges in this order: default, pwa, plugins.
-      const defaultGauges = [];
-      const customGauges = []; // PWA.
-      const pluginGauges = [];
-      for (const category of report.reportCategories) {
-        const renderer = specificCategoryRenderers[category.id] || categoryRenderer;
-        const categoryGauge = renderer.renderScoreGauge(category, report.categoryGroups || {});
-
-        if (Util.isPluginCategory(category.id)) {
-          pluginGauges.push(categoryGauge);
-        } else if (renderer.renderScoreGauge === categoryRenderer.renderScoreGauge) {
-          // The renderer for default categories is just the default CategoryRenderer.
-          // If the functions are equal, then renderer is an instance of CategoryRenderer.
-          // For example, the PWA category uses PwaCategoryRenderer, which overrides
-          // CategoryRenderer.renderScoreGauge, so it would fail this check and be placed
-          // in the customGauges bucket.
-          defaultGauges.push(categoryGauge);
-        } else {
-          customGauges.push(categoryGauge);
-        }
-      }
-      scoreHeader.append(...defaultGauges, ...customGauges, ...pluginGauges);
-
+      scoreHeader.append(
+        ...this._renderScoreGauges(report, categoryRenderer, specificCategoryRenderers));
       const scoreScale = this._dom.cloneTemplate('#tmpl-lh-scorescale', this._templateContext);
       const scoresContainer = this._dom.find('.lh-scores-container', headerContainer);
       scoresContainer.appendChild(scoreHeader);
@@ -267,9 +279,8 @@ class ReportRenderer {
 
       // The sticky header is just the score gauges, but styled to be smaller. Just
       // clone the gauges from the score header.
-      for (const gaugeWrapperEl of this._dom.findAll('.lh-gauge__wrapper', scoreHeader)) {
-        stickyHeader.appendChild(gaugeWrapperEl.cloneNode(true));
-      }
+      stickyHeader.append(
+        ...this._renderScoreGauges(report, categoryRenderer, specificCategoryRenderers));
 
       reportFragment.appendChild(stickyHeader);
     }
