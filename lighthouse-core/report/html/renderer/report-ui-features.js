@@ -46,8 +46,11 @@ class ReportUIFeatures {
     this.onExportButtonClick = this.onExportButtonClick.bind(this);
     this.onExport = this.onExport.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
-    this.printShortCutDetect = this.printShortCutDetect.bind(this);
+    this.onKeyUp = this.onKeyUp.bind(this);
     this.onChevronClick = this.onChevronClick.bind(this);
+    this.collapseAllDetails = this.collapseAllDetails.bind(this);
+    this.expandAllDetails = this.expandAllDetails.bind(this);
+    this._toggleDarkTheme = this._toggleDarkTheme.bind(this);
   }
 
   /**
@@ -63,9 +66,10 @@ class ReportUIFeatures {
     this._setupExportButton();
     this._setUpCollapseDetailsAfterPrinting();
     this._resetUIState();
-    this._registerDarkThemeToggles();
-    this._document.addEventListener('keydown', this.printShortCutDetect);
+    this._document.addEventListener('keyup', this.onKeyUp);
     this._document.addEventListener('copy', this.onCopy);
+    const topbarLogo = this._dom.find('.lh-topbar__logo', this._document);
+    topbarLogo.addEventListener('click', this._toggleDarkTheme);
   }
 
   /**
@@ -255,6 +259,21 @@ class ReportUIFeatures {
   }
 
   /**
+   * Keyup handler for the document.
+   * @param {KeyboardEvent} e
+   */
+  onKeyUp(e) {
+    if (e.key === 'd') {
+      this._toggleDarkTheme();
+    }
+
+    // Ctrl+P - Expands audit details when user prints via keyboard shortcut.
+    if ((e.ctrlKey || e.metaKey) && e.keyCode === 80) {
+      this.closeExportDropdown();
+    }
+  }
+
+  /**
    * Opens a new tab to the online viewer and sends the local page's JSON results
    * to the online viewer using postMessage.
    * @param {LH.Result} reportJson
@@ -284,16 +303,6 @@ class ReportUIFeatures {
     const fetchTime = json.fetchTime || fallbackFetchTime;
     const windowName = `${json.lighthouseVersion}-${json.requestedUrl}-${fetchTime}`;
     const popup = window.open(`${VIEWER_ORIGIN}${viewerPath}`, windowName);
-  }
-
-  /**
-   * Expands audit details when user prints via keyboard shortcut.
-   * @param {KeyboardEvent} e
-   */
-  printShortCutDetect(e) {
-    if ((e.ctrlKey || e.metaKey) && e.keyCode === 80) { // Ctrl+P
-      this.closeExportDropdown();
-    }
   }
 
   /**
@@ -383,21 +392,10 @@ class ReportUIFeatures {
   }
 
   /**
-   * Register listeners to toggle dark theme via clicking on LH logo or pressing 'd'.
    * @private
    */
-  _registerDarkThemeToggles() {
-    // TODO(#8185) - Persist dark mode state.
-    this._document.addEventListener('keyup', e => {
-      if (e.key === 'd') {
-        this._document.body.classList.toggle('dark');
-      }
-    });
-
-    const topbarLogo = this._dom.find('.lh-topbar__logo', this._document);
-    topbarLogo.addEventListener('click', () => {
-      this._document.body.classList.toggle('dark');
-    });
+  _toggleDarkTheme() {
+    this._document.body.classList.toggle('dark');
   }
 }
 
