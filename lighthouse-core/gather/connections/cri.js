@@ -108,16 +108,17 @@ class CriConnection extends Connection {
         });
       });
 
-      request.setTimeout(CONNECT_TIMEOUT, () => {
-        request.abort();
+      let ignoreECONNRESET = false;
+      request.on('error', err => {
+        // @ts-ignore - not in @types yet. See https://nodejs.org/api/errors.html#errors_class_systemerror.
+        if (err.code === 'ECONNRESET' && ignoreECONNRESET) return;
+        reject(err);
+      });
 
+      request.setTimeout(CONNECT_TIMEOUT, () => {
         // After aborting, we expect an ECONNRESET error. Ignore.
-        request.on('error', err => {
-          // @ts-ignore - not in @types yet. See https://nodejs.org/api/errors.html#errors_class_systemerror.
-          if (err.code !== 'ECONNRESET') {
-            throw err;
-          }
-        });
+        ignoreECONNRESET = true;
+        request.abort();
 
         // Reject on error with code specifically indicating timeout in connection setup.
         const err = new LighthouseError(LighthouseError.errors.CRI_TIMEOUT);
