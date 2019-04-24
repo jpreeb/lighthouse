@@ -56,7 +56,7 @@ class ReportUIFeatures {
     this.onKeyDown = this.onKeyDown.bind(this);
     this.printShortCutDetect = this.printShortCutDetect.bind(this);
     this.onChevronClick = this.onChevronClick.bind(this);
-    this._handleStickyHeader = this._handleStickyHeader.bind(this);
+    this._updateStickyHeaderOnScroll = this._updateStickyHeaderOnScroll.bind(this);
   }
 
   /**
@@ -75,8 +75,8 @@ class ReportUIFeatures {
     this._resetUIState();
     this._document.addEventListener('keydown', this.printShortCutDetect);
     this._document.addEventListener('copy', this.onCopy);
-    this._document.addEventListener('scroll', this._handleStickyHeader);
-    window.addEventListener('resize', this._handleStickyHeader);
+    this._document.addEventListener('scroll', this._updateStickyHeaderOnScroll);
+    window.addEventListener('resize', this._updateStickyHeaderOnScroll);
   }
 
   /**
@@ -400,7 +400,7 @@ class ReportUIFeatures {
     setTimeout(_ => URL.revokeObjectURL(href), 500);
   }
 
-  _handleStickyHeader() {
+  _updateStickyHeaderOnScroll() {
     // Show sticky header when the score scale begins to go underneath the topbar.
     const topbarBottom = this.topbarEl.getBoundingClientRect().bottom;
     const scoreScaleTop = this.scoreScaleEl.getBoundingClientRect().top;
